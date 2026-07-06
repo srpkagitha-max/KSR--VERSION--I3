@@ -60,9 +60,11 @@ async function submit(auto){
 }
 
 
+
 $("hallBtn").addEventListener("click", async()=>{
   const name = $("stName").value.trim() || "Student";
   const ph = $("stPhone").value.trim() || "-";
+  const photoUrl = ($("stPhoto") ? $("stPhoto").value.trim() : "") || "";
   const exId = $("stExamId").value.trim().toUpperCase() || "-";
   const exCode = $("stCode").value.trim().toUpperCase() || "-";
   let examTitle = "-";
@@ -86,42 +88,53 @@ $("hallBtn").addEventListener("click", async()=>{
       }
     }
   } catch(e) {}
-  const ht = "KSR-" + exId + "-" + (ph.replace(/\D/g,"").slice(-4) || "0000") + "-" + Date.now().toString().slice(-5);
+  const verifyId = "KSR-VFY-" + exId + "-" + (ph.replace(/\D/g,"").slice(-4) || "0000") + "-" + Date.now().toString().slice(-6);
+  const hallNo = "KSR-" + exId + "-" + (ph.replace(/\D/g,"").slice(-4) || "0000") + "-" + Date.now().toString().slice(-5);
+  const verifyText = `KSR Hall Ticket Verification%0AStudent: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(ph)}%0AExam: ${encodeURIComponent(exId)}%0ACode: ${encodeURIComponent(exCode)}%0AVerify ID: ${encodeURIComponent(verifyId)}`;
+  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=" + verifyText;
+  const photoHtml = photoUrl ? `<img src="${photoUrl}" style="width:110px;height:130px;object-fit:cover;border-radius:10px;border:2px solid #0b57d0">` : `<div style="width:110px;height:130px;border:2px dashed #999;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#777">PHOTO</div>`;
   const w = window.open("", "_blank");
   w.document.write(`<!DOCTYPE html><html><head><title>Hall Ticket</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>
   body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:16px;color:#111}
-  .hall-card{max-width:760px;margin:20px auto;background:#fff;border:2px solid #0b57d0;border-radius:18px;overflow:hidden}
-  .hall-head{background:linear-gradient(135deg,#0b57d0,#071a3d);color:#fff;padding:22px;text-align:center}
-  .hall-head h1{margin:0;font-size:28px}.hall-head p{margin:8px 0 0;font-size:16px}
-  .hall-body{padding:22px}.hall-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .hall-box{border:1px solid #d1d5db;border-radius:12px;padding:12px;background:#f8fafc}
-  .hall-label{font-size:12px;color:#555;font-weight:900;text-transform:uppercase}.hall-value{font-size:18px;font-weight:900;margin-top:5px}
-  .hall-inst{margin-top:18px;padding:14px;border-left:6px solid #fbbc04;background:#fff8db;border-radius:12px;line-height:1.6}
-  .hall-actions{text-align:center;margin:20px}.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:900;background:#0b57d0;color:#fff}
-  .hall-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:22px;border-top:1px dashed #aaa;padding-top:18px}
-  @media print{body{background:white}.hall-actions{display:none}.hall-card{box-shadow:none;border-radius:0;margin:0;max-width:100%}}
-  @media(max-width:700px){.hall-grid{grid-template-columns:1fr}.hall-head h1{font-size:24px}}
+  .ticket{max-width:820px;margin:20px auto;background:#fff;border:2px solid #0b57d0;border-radius:18px;overflow:hidden}
+  .head{background:linear-gradient(135deg,#0b57d0,#071a3d);color:white;text-align:center;padding:20px}
+  .head h1{margin:0;font-size:30px}.head p{margin:7px 0 0;font-weight:700}
+  .body{padding:22px}.toprow{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .box{border:1px solid #d1d5db;border-radius:12px;padding:12px;background:#f8fafc}
+  .label{font-size:11px;color:#555;font-weight:900;text-transform:uppercase}.value{font-size:18px;font-weight:900;margin-top:5px}
+  .qr{text-align:center}.inst{margin-top:18px;padding:14px;border-left:6px solid #fbbc04;background:#fff8db;border-radius:12px;line-height:1.6}
+  .foot{display:flex;justify-content:space-between;margin-top:22px;border-top:1px dashed #aaa;padding-top:18px}
+  .actions{text-align:center;margin:20px}.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:900;background:#0b57d0;color:white}
+  @media print{body{background:white}.actions{display:none}.ticket{margin:0;max-width:100%;border-radius:0}}
+  @media(max-width:700px){.grid{grid-template-columns:1fr}.toprow{flex-direction:column}.head h1{font-size:24px}}
   </style></head><body>
-  <div class="hall-card">
-    <div class="hall-head"><h1>KSR Online Exam Platform</h1><p>Professional Hall Ticket</p></div>
-    <div class="hall-body">
-      <div class="hall-grid">
-        <div class="hall-box"><div class="hall-label">Hall Ticket No</div><div class="hall-value">${ht}</div></div>
-        <div class="hall-box"><div class="hall-label">Student Name</div><div class="hall-value">${name}</div></div>
-        <div class="hall-box"><div class="hall-label">Phone</div><div class="hall-value">${ph}</div></div>
-        <div class="hall-box"><div class="hall-label">Exam Title</div><div class="hall-value">${examTitle}</div></div>
-        <div class="hall-box"><div class="hall-label">Exam ID</div><div class="hall-value">${exId}</div></div>
-        <div class="hall-box"><div class="hall-label">Exam Code</div><div class="hall-value">${exCode}</div></div>
-        <div class="hall-box"><div class="hall-label">Start Time</div><div class="hall-value">${startText}</div></div>
-        <div class="hall-box"><div class="hall-label">End Time</div><div class="hall-value">${endText}</div></div>
-        <div class="hall-box"><div class="hall-label">Duration</div><div class="hall-value">${durationText}</div></div>
-        <div class="hall-box"><div class="hall-label">Status</div><div class="hall-value">Eligible</div></div>
+  <div class="ticket">
+    <div class="head"><h1>KSR Online Exam Platform</h1><p>Professional Hall Ticket with QR Verification</p></div>
+    <div class="body">
+      <div class="toprow">
+        <div>${photoHtml}</div>
+        <div class="qr"><img src="${qrUrl}" width="145" height="145"><br><b>Scan to Verify</b></div>
       </div>
-      <div class="hall-inst"><b>Instructions:</b><br>1. Exam ID and Exam Code must be entered exactly as shown.<br>2. Do not refresh or close the browser during exam.<br>3. Submit before time ends. Auto submit will happen at end time.</div>
-      <div class="hall-foot"><div>Student Signature</div><div>Invigilator Signature</div></div>
+      <div class="grid">
+        <div class="box"><div class="label">Hall Ticket No</div><div class="value">${hallNo}</div></div>
+        <div class="box"><div class="label">Verification ID</div><div class="value">${verifyId}</div></div>
+        <div class="box"><div class="label">Student Name</div><div class="value">${name}</div></div>
+        <div class="box"><div class="label">Phone</div><div class="value">${ph}</div></div>
+        <div class="box"><div class="label">Exam Title</div><div class="value">${examTitle}</div></div>
+        <div class="box"><div class="label">Exam ID</div><div class="value">${exId}</div></div>
+        <div class="box"><div class="label">Exam Code</div><div class="value">${exCode}</div></div>
+        <div class="box"><div class="label">Status</div><div class="value">Eligible</div></div>
+        <div class="box"><div class="label">Start Time</div><div class="value">${startText}</div></div>
+        <div class="box"><div class="label">End Time</div><div class="value">${endText}</div></div>
+        <div class="box"><div class="label">Duration</div><div class="value">${durationText}</div></div>
+        <div class="box"><div class="label">Generated On</div><div class="value">${new Date().toLocaleString()}</div></div>
+      </div>
+      <div class="inst"><b>Instructions:</b><br>1. Carry this hall ticket during exam.<br>2. Exam ID and Code must match exactly.<br>3. Do not refresh/close browser during exam.<br>4. Time ends means auto submit will happen.</div>
+      <div class="foot"><div>Student Signature</div><div>Invigilator Signature</div></div>
     </div>
   </div>
-  <div class="hall-actions"><button class="btn" onclick="window.print()">Print / Save PDF</button></div>
+  <div class="actions"><button class="btn" onclick="window.print()">Print / Save PDF</button></div>
   </body></html>`);
   w.document.close();
 });
