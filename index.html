@@ -1,22 +1,48 @@
 <!DOCTYPE html>
-<html lang="te">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KSR Version L.3 Phase 3.1 - Hall Ticket QR</title><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KSR Online Exam Platform</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-<div class="header"><div class="wrap top"><div><div class="brand">KSR Online Exam Platform</div><div class="sub">Version L.3 Phase 3.1 - Hall Ticket QR</div></div><a style="color:white;font-weight:900" href="admin.html">Admin</a></div></div>
-<div class="wrap">
-  <div id="login" class="card">
-    <h2>Student Login</h2>
-    <div class="grid"><div><label>Name</label><input id="stName" placeholder="Student name"></div><div><label>Phone</label><input id="stPhone" placeholder="Phone number"></div></div>
-    <div><label>Student Photo URL (optional)</label><input id="stPhoto" placeholder="Paste photo link optional"></div><div class="grid"><div><label>Exam ID</label><input id="stExamId" placeholder="DSC001"></div><div><label>Exam Code</label><input id="stCode" placeholder="Exam code"></div></div>
-    <button class="p" id="startBtn">Start Exam</button><button class="s" id="hallBtn">Hall Ticket</button><p id="loginMsg" class="small"></p>
-  </div>
-  <div id="exam" class="hide">
-    <div class="card top"><div><b id="examTitle"></b><br><span id="prog" class="small"></span></div><span id="timer" class="timer">00:00</span></div>
-    <div class="card" id="qcard"></div>
-    <div class="card top"><button class="s" id="prevBtn">Previous</button><button class="o" id="markBtn">Mark</button><button class="p" id="nextBtn">Next</button><button class="d" id="submitBtn">Submit</button></div>
-    <div class="card"><b>Palette</b><div id="palette" class="pal"></div></div>
-  </div>
-  <div id="result" class="card hide"></div>
-</div>
-<script type="module" src="student.js?v=l3phase31"></script>
-</body></html>
+
+  <header class="top-header">
+    <h1>KSR Online Exam Platform</h1>
+    <h3>Version L.3 Phase 3.1 - Hall Ticket QR</h3>
+    <a href="admin.html" class="admin-link">Admin</a>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Student Login</h2>
+
+      <label>Name</label>
+      <input type="text" id="studentName" placeholder="Student name" />
+
+      <label>Phone</label>
+      <input type="tel" id="studentPhone" placeholder="Phone number" />
+
+      <label>Student Photo URL (optional)</label>
+      <input type="text" id="studentPhoto" placeholder="Paste photo link optional" />
+
+      <label>Exam ID</label>
+      <input type="text" id="examId" placeholder="DSC001" value="DSC001" />
+
+      <label>Exam Code</label>
+      <input type="text" id="examCode" placeholder="Exam code" />
+
+      <div class="btn-row">
+        <button id="startExamBtn" class="primary-btn">Start Exam</button>
+        <button id="hallTicketBtn" class="secondary-btn">Hall Ticket</button>
+      </div>
+
+      <p id="loginMsg"></p>
+    </section>
+  </main>
+
+  <script src="firebase-config.js"></script>
+  <script src="student.js"></script>
+</body>
+</html>
